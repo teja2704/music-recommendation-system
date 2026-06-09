@@ -1,0 +1,10 @@
+Flask>=3.0,<4
+ml-dtypes==0.3.2
+numpy==1.26.4
+opencv-python==4.11.0.86
+protobuf==4.25.3
+python-dotenv>=1.0,<2
+scikit-learn==1.6.1
+spotipy==2.25.0
+tensorboard==2.16.2
+tensorflow==2.16.1

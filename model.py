@@ -1,12 +1,16 @@
 import tensorflow as tf
 from tensorflow.keras import layers, models # type: ignore
+from project_config import IMAGE_SIZE, NUM_CLASSES
 
 # Define CNN model architecture
 def create_model():
     model = models.Sequential()
 
     # First convolutional block
-    model.add(layers.Conv2D(64, (3, 3), activation='relu', input_shape=(48, 48, 1)))
+    model.add(
+        layers.Input(shape=(IMAGE_SIZE, IMAGE_SIZE, 1))
+    )
+    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
     model.add(layers.MaxPooling2D((2, 2)))
     model.add(layers.Dropout(0.3))
 
@@ -27,16 +31,13 @@ def create_model():
     model.add(layers.Dense(512, activation='relu'))
     model.add(layers.Dropout(0.5))
 
-    # Output layer (7 emotions)
-    model.add(layers.Dense(7, activation='softmax'))  # Softmax for multi-class classification
+    # Output layer
+    model.add(layers.Dense(NUM_CLASSES, activation='softmax'))
 
     # Compile the model
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
     return model
 
-# Create and return the model
-model = create_model()
-
-# Display the model architecture
-model.summary()
+if __name__ == "__main__":
+    create_model().summary()

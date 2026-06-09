@@ -8,27 +8,25 @@ import time
 from spotipy.oauth2 import SpotifyClientCredentials
 from flask import Flask, render_template
 from threading import Thread
+from project_config import EMOTION_LABELS, IMAGE_SIZE, MODEL_PATH
+from spotify_config import get_spotify_client_credentials
 
 # Load the trained emotion detection model
-model = tf.keras.models.load_model("emotion_recognition_model.h5")
-
-# Define the list of emotions
-EMOTION_LABELS = ["angry", "disgusted", "fearful", "happy", "neutral", "sad", "surprised"]
+model = tf.keras.models.load_model(MODEL_PATH)
 
 # Map emotions to Spotify genres
 EMOTION_GENRE_MAPPING = {
     "happy": "pop",
     "sad": "acoustic",
     "angry": "rock",
-    "fearful": "dark",
+    "fear": "dark",
     "neutral": "chill",
-    "surprised": "electronic",
-    "disgusted": "alternative"
+    "surprise": "electronic",
+    "disgust": "alternative"
 }
 
-# Spotify API credentials
-SPOTIFY_CLIENT_ID = "a20569cb114a4cd380f6c240f0ad744c"
-SPOTIFY_CLIENT_SECRET = "76b780a37b444824a6372dfec6ec41f3"
+# Load Spotify API credentials from the process environment.
+SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET = get_spotify_client_credentials()
 
 # Authenticate with Spotify
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
@@ -39,9 +37,9 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
 # Function to detect emotion from an image
 def predict_emotion(image):
     img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to grayscale
-    img = cv2.resize(img, (48, 48))  # Resize to match the model's expected input
+    img = cv2.resize(img, (IMAGE_SIZE, IMAGE_SIZE))
     img = img / 255.0  # Normalize the image
-    img = img.reshape(1, 48, 48, 1)  # Add batch dimension
+    img = img.reshape(1, IMAGE_SIZE, IMAGE_SIZE, 1)
     prediction = model.predict(img)  # Get the model's prediction
     predicted_class = np.argmax(prediction)  # Get the emotion label
     return EMOTION_LABELS[predicted_class]

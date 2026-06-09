@@ -1,10 +1,13 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from spotify_config import (
+    get_spotify_client_credentials,
+    get_spotify_redirect_uri,
+)
 
-# Replace these with your Spotify App credentials
-CLIENT_ID = "a20569cb114a4cd380f6c240f0ad744c"
-CLIENT_SECRET = "76b780a37b444824a6372dfec6ec41f3"
-REDIRECT_URI = "http://localhost:8888/callback"
+# Load Spotify settings from the process environment.
+CLIENT_ID, CLIENT_SECRET = get_spotify_client_credentials()
+REDIRECT_URI = get_spotify_redirect_uri()
 
 # Set up authentication
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
