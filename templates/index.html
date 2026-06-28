@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpriTune</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <main class="shell">
+        <section class="hero">
+            <p class="eyebrow">Browser-based emotion music recommendations</p>
+            <h1>ExpriTune</h1>
+            <p class="lede">
+                Capture a frame from your camera, detect the visible emotion, and
+                use it to request Spotify recommendations.
+            </p>
+            <p class="privacy-note">
+                Camera access stays in your browser until you press Capture. The
+                server receives one still frame for prediction.
+            </p>
+        </section>
+
+        <section class="status-card">
+            <h2>System Status</h2>
+            <dl>
+                <div>
+                    <dt>Model</dt>
+                    <dd id="model-status">{{ "Ready" if model_ready else "Missing" }}</dd>
+                </div>
+                <div>
+                    <dt>Spotify</dt>
+                    <dd id="spotify-status">Checking...</dd>
+                </div>
+                <div>
+                    <dt>Emotions</dt>
+                    <dd>{{ emotion_labels | join(", ") }}</dd>
+                </div>
+            </dl>
+        </section>
+
+        <section class="camera-card">
+            <div class="video-wrap">
+                <video id="camera-preview" autoplay playsinline muted></video>
+                <canvas id="capture-canvas" hidden></canvas>
+            </div>
+            <div class="actions">
+                <button id="start-camera" type="button">Start Camera</button>
+                <button id="capture-frame" type="button" disabled>Capture Emotion</button>
+            </div>
+            <p id="message" class="message" role="status"></p>
+        </section>
+
+        <section class="result-card" id="result-card" hidden>
+            <h2>Detected Emotion</h2>
+            <p class="emotion-result">
+                <span id="emotion-label"></span>
+                <span id="emotion-confidence"></span>
+            </p>
+            <button id="load-songs" type="button">Load Spotify Recommendations</button>
+        </section>
+
+        <section class="songs-card" id="songs-card" hidden>
+            <h2>Recommendations</h2>
+            <div id="songs-list"></div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

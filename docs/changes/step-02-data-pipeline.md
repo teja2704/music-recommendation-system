@@ -95,8 +95,8 @@ python evaluate.py
 python predict.py path\to\image.jpg
 ```
 
-Paths, epochs, batch size, and prediction browser behavior can be changed with
-command-line options. Use `--help` on each script for details.
+Paths, epochs, and batch size can be changed with command-line options. Use
+`--help` on each script for details.
 
 The model format is now Keras' native `.keras` format under:
 

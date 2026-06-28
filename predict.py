@@ -1,6 +1,5 @@
 import argparse
 import random
-import webbrowser
 from pathlib import Path
 
 import cv2
@@ -40,11 +39,9 @@ def predict_emotion(model, image_path):
     return EMOTION_LABELS[int(np.argmax(prediction))]
 
 
-def recommend_music(emotion, open_browser=False):
+def recommend_music(emotion):
     song_link = random.choice(MUSIC_RECOMMENDATIONS[emotion])
     print(f"Recommended song for {emotion}: {song_link}")
-    if open_browser:
-        webbrowser.open(song_link)
     return song_link
 
 
@@ -54,11 +51,6 @@ def parse_args():
     )
     parser.add_argument("image_path", type=Path)
     parser.add_argument("--model-path", type=Path, default=MODEL_PATH)
-    parser.add_argument(
-        "--open-browser",
-        action="store_true",
-        help="Open the recommendation in the default browser.",
-    )
     return parser.parse_args()
 
 
@@ -72,7 +64,7 @@ def main():
     model = tf.keras.models.load_model(args.model_path)
     emotion = predict_emotion(model, args.image_path)
     print(f"The predicted emotion is: {emotion}")
-    recommend_music(emotion, open_browser=args.open_browser)
+    recommend_music(emotion)
 
 
 if __name__ == "__main__":

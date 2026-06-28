@@ -3,91 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ emotion.capitalize() }} Songs</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f8f8;
-        }
-        .song {
-            border: 1px solid #ccc;
-            margin-bottom: 20px;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .album-art {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            margin-right: 20px;
-            border-radius: 8px;
-        }
-        .song-info {
-            flex: 1;
-        }
-        .song-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-        .artist {
-            font-size: 16px;
-            color: #555;
-        }
-        .release-date {
-            font-size: 14px;
-            color: gray;
-            margin-top: 5px;
-        }
-        .play-button {
-            background-color: #1db954;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-            display: inline-block;
-            margin-top: 10px;
-            width: 100%;
-            max-width: 150px;
-            text-align: center;
-        }
-        .refresh-button {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-            display: block;
-            width: 200px;
-            margin: 20px auto;
-        }
-    </style>
+    <title>{{ emotion.capitalize() }} Songs - ExpriTune</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>{{ emotion.capitalize() }} Songs</h1>
-    <div>
-        {% for song in songs %}
-            <div class="song">
-                <img src="{{ song.album_art }}" alt="Album Art" class="album-art">
-                <div class="song-info">
-                    <div class="song-name">{{ song.name }}</div>
-                    <div class="artist">{{ song.artist }}</div>
-                    <div class="release-date">Released: {{ song.release_date }}</div>
-                    <a href="{{ song.url }}" class="play-button" target="_blank">Play on Spotify</a>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-    <a href="/refresh_songs/{{ emotion }}" class="refresh-button">Refresh Songs</a>
+    <main class="shell">
+        <section class="hero">
+            <p class="eyebrow">Spotify recommendations</p>
+            <h1>{{ emotion.capitalize() }} Songs</h1>
+            <p><a href="{{ url_for('index') }}">Back to camera capture</a></p>
+        </section>
+
+        {% if error %}
+            <section class="status-card error">
+                <h2>Unable to Load Songs</h2>
+                <p>{{ error }}</p>
+            </section>
+        {% else %}
+            <section class="songs-card">
+                {% for song in songs %}
+                    <article class="song">
+                        {% if song.album_art %}
+                            <img src="{{ song.album_art }}" alt="" class="album-art">
+                        {% endif %}
+                        <div class="song-info">
+                            <h2>{{ song.name }}</h2>
+                            <p>{{ song.artist }}</p>
+                            <p class="muted">Released: {{ song.release_date }}</p>
+                            <a href="{{ song.url }}" class="play-button" target="_blank" rel="noreferrer">
+                                Play on Spotify
+                            </a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </section>
+        {% endif %}
+    </main>
 </body>
 </html>
